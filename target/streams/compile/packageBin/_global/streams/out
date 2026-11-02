@@ -1,0 +1,25 @@
+[0m[[0m[0mdebug[0m] [0m[0mPackaging C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\test_2.13-0.1.0.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\FOL2FOMLModelTranslator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\FOL2FOMLModelTranslator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\FOL2FOMLModelTranslator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\FOL2FOMLModelTranslator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\KripkeModel$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\KripkeModel$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\KripkeModel.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\KripkeModel.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\ModelFinder$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\ModelFinder$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\ModelFinder.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\ModelFinder.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\MoMo$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\MoMo$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\MoMo.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\MoMo.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\TPTP2SMTTranslator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\TPTP2SMTTranslator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MoMo\TPTP2SMTTranslator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hk_sa\Documents\PROMOTION\MoMo\target\scala-2.13\classes\MoMo\TPTP2SMTTranslator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m

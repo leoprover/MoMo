@@ -1,0 +1,176 @@
+1775732574882:~run
+1775732708508:q
+1775732715235:~run
+1775745664558:run --help
+1775746094737:Run(exit)
+1775746127768:run
+1775813247852:run --version
+1775813266468:run -v
+1775813270889:run -h
+1775815045707::exit
+1775816236491:run
+1775816273550:run prrrr
+1775816300062:run -t -l
+1775816525195:run -t -l -m -w
+1775818862540:run path -t -l -m -w
+1775819795263:run path -k -l -m -w
+1775819851905:run path -t -l -m -w
+1775820202882:run path -t 90 -l -m -w
+1775820523882:q
+1775820528512:~run
+1775820847199:~run path -t 90 -l -m -w
+1775821705046:~run path -timeout 90 -l -m -w
+1775821726329:~run path --timeout 90 -l -m -w
+1775828180591:~run path --timeout 90 -l -m -s model.txt -w
+1775828376190:~run path peepoop --timeout 90 -l -m -s model.txt -w
+1775828446647:~run path --timeout 90 -l -m -s model.txt -w
+1775828465007:~run path --timeout 90 -l -m -s model.txt lololol -w
+1775828477267:~run path --timeout 90 -l -m -s model.txt -w
+1776071602019:run problem.txt -t 43 -g
+1776071767090:run problem.txt -t 43 -h
+1776071941471:run problem.txt -t 43 -g
+1776071947075:run problem.txt -t 43 -h
+1776072111663:run problem.txt -t 43
+1776072350508:run problem.txt -t egw
+1776243166964:run
+1776244224595:compile
+1776245455280:compile -deprecations
+1776245457051:compile -deprecation
+1776245470602:compile /-deprecation
+1776245478732:compile / deprecation
+1776245486491:compile
+1776245492693:run
+1776245694414:compile
+1776245707304:run -deprecation
+1776245788058:compile
+1776245792747:run
+1776245827438:compile
+1776245841920:run
+1776245897785:run -deprecation
+1776245907362:run
+1776246251140:printWarnings
+1776246257303:compile
+1776246259801:run
+1776248399426:compile
+1776249272449:run
+1777548432302:compile
+1777551503585:run
+1777551858687:compile
+1777551862184:run
+1778658661002:sbt compile
+1778658667392:compile
+1778658695026:run
+1778659180124:compile
+1778659182813:run
+1778663392555:compile
+1778663406170:reload
+1778663415356:run
+1778667480513:run "problem.txt"
+1778667774318:run
+1778668440920:run "problem.txt"
+1778668674883:run "C:\\Users\\hk_sa\\Documents\\PROMOTION\\problem.txt"
+1778668762635:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1778669130910:run "../problem.txt"
+1778669198650:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1778670008003:run "../problem.txt"
+1778670502570:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1778671248035:run "../problem.txt"
+1780491044575:compile
+1780491052380:run
+1780491076183:run "C:\\Users\\hk_sa\\Documents\\PROMOTION\\problem.txt"
+1780491094553:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1781076021618:svt compile
+1781076030506:compile
+1781076042682:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1781247909387:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -deprecation
+1781247924890:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1781248030236:re-run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1781248048111:compile
+1781248054386:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -deprecation
+1782134092963:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1782134102406:(run -deprecation) "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1782134121006:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786432342009:compile
+1786432346035:run
+1786432477971:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786441348240:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -deprecation
+1786444301927:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786449719772:compile
+1786449729243::quit
+1786449733853:Exit
+1786449736667:Exit()
+1786449824889:compile
+1786449837908:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786540203009:compile
+1786540205886:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786540368073:compile
+1786540371098:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786540599182:reload
+1786540603356:compile
+1786540615684:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786540754997:compile
+1786540758743:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786541729684:reload
+1786541966754:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" --help
+1786544248591:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w
+1786544385589:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t
+1786544538376:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w
+1786544594459:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w ctuvzihb
+1786545652343:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 3
+1786628654683:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 1
+1786629514353:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 2
+1786629770330:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 3
+1786629930812:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 1
+1786629936316:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786629943198:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"4
+1786629952494:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 4
+1786630372304:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 1
+1786630376129:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 2
+1786630675229:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 27
+1786696404363:compile
+1786696538960:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 27
+1786696695903:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786697610095:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w frog
+1786698589291:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786700549731:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w frog
+1786705310955:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 0
+1786705369847:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w 2
+1786705758392:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w frog
+1786707144663:compile
+1786707198227:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w frog
+1786708361419:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -grasshopper
+1786708819693:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1786709058765:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t
+1786709072276:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 3
+1786709085348:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 1
+1786709092996:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 0
+1786709284456:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1792485800328:compile
+1792485805068:run
+1792485817118:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1792490533388:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 0
+1792491086329:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt"
+1792657113307:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t fe
+1792657255048:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t -436
+1792657602261:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -h
+1792657877023:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t -436
+1792658872383:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t -w
+1792659273416:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1792751720248:-deprecation run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1792751734020:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1792751826801:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1792759931638:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1792759948640:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793101090938:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793101113570:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793178745474:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793178762553:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793185062617:run -deprecation "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793185145517:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793637987210:compile
+1793638005827:reload
+1793638009609:compile
+1793638012154:run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10
+1793638150538:quit
+1793638159072::quit
+1793638177258:exit

@@ -1,0 +1,18 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt", Some(4a265c44-336c-4c94-ba31-ebd56945385b), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 4 Scala sources to C:\Users\hk_sa\Documents\PROMOTION\test2\target\scala-2.13\classes ...[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\hk_sa\Documents\PROMOTION\test2\src\main\scala\FOL2FOMLModelTranslator.scala:15:44: not found: type KripkeModel[0m
+[0m[[0m[31merror[0m] [0m[0m	def apply(model: String, format: String): KripkeModel {[0m
+[0m[[0m[31merror[0m] [0m[0m	                                          ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\hk_sa\Documents\PROMOTION\test2\src\main\scala\FOL2FOMLModelTranslator.scala:15:6: only traits and abstract classes can have declared but undefined members[0m
+[0m[[0m[31merror[0m] [0m[0m	def apply(model: String, format: String): KripkeModel {[0m
+[0m[[0m[31merror[0m] [0m[0m	    ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mC:\Users\hk_sa\Documents\PROMOTION\test2\src\main\scala\MoMo.scala:89:9: This catches all Throwables. If this is really intended, use `case _ : Throwable` to clear this warning.[0m
+[0m[[0m[33mwarn[0m] [0m[0m			case _ => println("unexpected error during translation to smt-lib")[0m
+[0m[[0m[33mwarn[0m] [0m[0m			     ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 4 s, completed 20.10.2026, 15:47:05[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

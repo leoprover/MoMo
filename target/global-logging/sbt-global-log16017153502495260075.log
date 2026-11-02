@@ -1,0 +1,14 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -w frog, Some(781f390f-592a-4e42-8ff2-6e08682bcd1d), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to C:\Users\hk_sa\Documents\PROMOTION\test2\target\scala-2.13\classes ...[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\hk_sa\Documents\PROMOTION\test2\src\main\scala\MoMo.scala:180:14: illegal start of simple pattern[0m
+[0m[[0m[31merror[0m] [0m[0m								case : => {[0m
+[0m[[0m[31merror[0m] [0m[0m								     ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\hk_sa\Documents\PROMOTION\test2\src\main\scala\MoMo.scala:183:8: '=>' expected but '}' found.[0m
+[0m[[0m[31merror[0m] [0m[0m							}[0m
+[0m[[0m[31merror[0m] [0m[0m							^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 0 s, completed 14.08.2026, 13:18:20[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
