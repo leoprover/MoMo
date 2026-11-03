@@ -1,6 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt", Some(e18f0058-6198-4037-8c66-a6dfc4e33414), Some(CommandSource(console0)))[0m
-[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
-[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
-[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to C:\Users\hk_sa\Documents\PROMOTION\test2\target\scala-2.13\classes ...[0m
-[0m[[0m[32msuccess[0m] [0m[0mTotal time: 6 s, completed 14.08.2026, 14:00:25[0m
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

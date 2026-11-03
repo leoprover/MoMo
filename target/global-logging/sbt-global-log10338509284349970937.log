@@ -1,5 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -h, Some(a64fd082-cd4c-4446-b5db-7ef0326c71d9), Some(CommandSource(console0)))[0m
-[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
-[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
-[0m[[0m[32msuccess[0m] [0m[0mTotal time: 2 s, completed 22.10.2026, 10:26:44[0m
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

@@ -1,5 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(-deprecation run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10, Some(8679bb8b-9324-4cdd-aa9f-06abefb513f2), Some(CommandSource(console0)))[0m
-[0m[[0m[31merror[0m] [0m[0mExpected 'debug'[0m
-[0m[[0m[31merror[0m] [0m[0m-deprecation run "C:/Users/hk_sa/Documents/PROMOTION/problem.txt" -t 10[0m
-[0m[[0m[31merror[0m] [0m[0m   ^[0m
-[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
