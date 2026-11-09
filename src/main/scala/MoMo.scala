@@ -26,7 +26,7 @@ object MoMo {
 	private[this] var problemPath : String = ""
 	private[this] var timeout : Int = 60
 	private[this] var worldNumber : Option[Int] = None
-	private[this] var modelPath : String = "" //or rather Option? probably
+	private[this] var modelPath : Option[String] = None
 	private[this] var letPath = Path.of("./lib/logic-embedding-app-1.9.2.jar").toAbsolutePath
 	
 	//main process
@@ -46,19 +46,21 @@ object MoMo {
 			return
 		} else {
 			try {
-//[WIP] proper error handling: errors should be thrown inside parseArgs so that catch can actually... catch them(?), instead of handling them all inside the function i guess?
 				parseArgs(args.toSeq)
 			} catch {
 				case ex: NumberFormatException => 
 					//println("numberformat")
-					println(ex.getMessage)
+					println("error during cmd line parsing. " + ex.getMessage)
 					System.exit(1)
 				case ex: IllegalArgumentException => 
 					//println("illegal")
-					println(ex.getMessage) 
+					println("error during cmd line parsing. " + ex.getMessage) 
+					System.exit(1)
+				case ex: NoSuchElementException =>
+					println("error during cmd line parsing. " + ex.getMessage)
 					System.exit(1)
 				case ex: Throwable =>
-					println("unexpected error during parsing " + ex.getMessage + ".\n See the help information for possible arguments and options:\n")
+					println("unexpected error during cmd line parsing: " + ex.getMessage + ".\nSee the help information for possible arguments and options:\n")
 					printHelp()
 					System.exit(1)
 			}
@@ -71,7 +73,7 @@ object MoMo {
 			letProblem = letCmd.!!
 		} catch {
 			case _ : Throwable => {
-				println("error: sth wrong with tptp problem :(")
+				println("error during the embedding of the foml problem to fol")
 				System.exit(1)
 			}
 		}
@@ -128,7 +130,13 @@ object MoMo {
 				//[WIP] print output model + SZS: conjecture+model => countermodel/CSA; no conjecture+model => model/SAT
 				println("finite model found (smt)")
 				println(model)
-				FOL2FOMLModelTranslator.apply(modalDef, model, "smt")
+				try {
+					FOL2FOMLModelTranslator.apply(modalDef, model, "smt")
+				} catch {
+					case ex: Throwable => {
+						println("unexpected error during translation of the generated fol model to a kripke model: " + ex.getMessage)
+					}
+				}
 			}
 		}
 		
@@ -136,7 +144,7 @@ object MoMo {
 
 	//method to print the help stuff when evoking on cmd line
 	private[this] final def printHelp(): Unit = {
-		print("Usage: MoMo <problem> [options]\n MoMo is a finite model finder for first-order modal logics in TPTP problem format NXF.\n In case the given problem includes a conjecture, a countermodel is searched. Otherwise a model satisfying the given axioms is searched.\n If a (counter-)model is found, it is given in stdout.\n\n Parameters:\n <problem> :	Either contains the file path of the problem file as a String OR (planned:) is '-' to input problem via stdin\n\n Options:\n --help | -h	view usage, including necessary parameters and options.\n --timeout | -t	set a time limit for timeouts. Default value: 60sec.\n ")
+		print("Usage: MoMo <problem> [options]\n MoMo is a finite model finder for first-order modal logics in TPTP problem format NXF.\n In case the given problem includes a conjecture, a countermodel is searched. Otherwise a model satisfying the given axioms is searched.\n If a (counter-)model is found, it is given in stdout.\n\n Parameters:\n <problem> :	Either contains the file path of the problem file as a String OR (planned:) is '-' to input problem via stdin\n\n Options:\n --help | -h	view usage, including necessary parameters and options.\n --timeout | -t	set a time limit for timeouts in seconds. Default value: 60sec.\n --saveModel | -s	give path to a file where a generated model will be saved in. If the file already exists, the file will be overwritten.\n --worlds | -w	set the number of worlds that the generated model has to include exactly. The number has to be an integer > 0")
 	}
 
 	//method to parse cmd line arguments
@@ -160,47 +168,44 @@ object MoMo {
 							try{
 								timeout = argsO.tail.head.toInt
 								if(timeout < 1){
-									throw new NumberFormatException("For input string: " + timeout.toString)
+									throw new IllegalArgumentException("for input string: " + timeout.toString + "\ninvalid input for timeout. timeout has to be a positive integer.")
 								}
 								argsO = argsO.tail.tail
 								//println(argsO)
 							} catch {
-								case ex: NumberFormatException => 
-									//println("Invalid input for timeout. Timeout has to be a integer.")
-									throw new NumberFormatException(ex.getMessage + ": Invalid input for timeout. Timeout has to be a positive integer.")
-								case _ : Throwable =>
-									throw new Throwable("argument for timeout ")
+								case ex: NumberFormatException => {
+									throw new NumberFormatException(ex.getMessage + "\ninvalid input for timeout. timeout has to be a positive integer.")
+								}
+								case ex: NoSuchElementException => {
+									throw new NoSuchElementException("no time limit was given. set the time limit for the timeout to n > 0 via -t n or --timeout n")
+								}
+								case ex: IllegalArgumentException => {
+									throw new IllegalArgumentException(ex.getMessage)
+								}
+								case ex : Throwable => {
+									println(ex.getClass)
+									throw new Throwable("argument for timeout")
+								}
 							}
 							println(s"Set timeout to ${timeout}")
 						case ("--saveModel" | "-s") =>
-							//[WIP] check if modelPath exists before
-							modelPath = argsO.tail.head
+							modelPath = Some(argsO.tail.head)
+							modelPath match {
+								case None => {
+								}
+								case Some(path: String) => {
+									println(s"If a model is found, it will be saved in $path")
+									if (Files.exists(Paths.get(path))) {
+										println("Path where model will be saved exists already. The file will be overwritten.")	
+									}
+								}
+							}
 							argsO = argsO.tail.tail
-							println(s"If a model is found, it will be saved in $modelPath")
-							//println(argsO)
 						case ("--worlds" | "-w") =>
-							//try{
-							//	worldNumber = argsO.tail.head.toInt
-							//	argsO = argsO.tail.tail
-								//println(argsO)
-							//} catch {
-							//	case ex: NumberFormatException => {
-							//		println("No number of worlds is specified.")
-							//		System.exit(1)
-							//	}
-							//	case _ : Throwable =>
-							//		println("No number of worlds is specified.")
-							//		System.exit(1)
-							//}
-							//worldNumber = Some(argsO.tail.head.toInt)
-							//if(worldNumber == None | worldNumber == Some(0)) {
-							//	throw new NumberFormatException("invalid input for number of worlds. Input needs to be an integer > 0!")
-							//}
-							
 							Try{argsO.tail.head.toInt} match {
 								case Success(n: Int) => {
 									if(n == 0){
-										throw new NumberFormatException("invalid input for number of worlds. Input needs to be an integer > 0!")
+										throw new IllegalArgumentException("invalid input for number of worlds. Input needs to be an integer > 0!")
 									} else {
 										println("specify number of worlds success")
 										worldNumber = Some(argsO.tail.head.toInt)
@@ -208,7 +213,14 @@ object MoMo {
 								}
 								//case None => {
 								case Failure(e) => {
-									throw new NumberFormatException(e.getMessage + "\nInvalid input for number of worlds. Input needs to be an integer > 0!")
+									e match {
+										case error: NumberFormatException => {
+											throw new NumberFormatException(e.getMessage + "\ninvalid input for number of worlds. input needs to be an integer > 0!")
+										}
+										case error: NoSuchElementException => {
+											throw new NoSuchElementException("no number of worlds was specified. set the number of worlds to n > 0 via -w n or --worlds n")
+										}
+									}
 								}
 							}
 							argsO = argsO.tail.tail

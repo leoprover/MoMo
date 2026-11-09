@@ -97,7 +97,6 @@ object KripkeModel{
 					}
 
 					//form annotated formulas for domain definition
-					//[WIP] check that modal problem calls for const domain
 
 					if(sort != "$world"){
 						if(sortsMap(sort).length > 1){
@@ -109,6 +108,7 @@ object KripkeModel{
 						} else { //for varying domains
 							if(opInterp.apply("$exists_in_world_" + sort).size > 1) { //domains differ in at least two worlds => all domains are listed per world
 								domH += varyD(sort, opInterp("$exists_in_world_" + sort), sortsMap(sort), sortsMap("$world"))
+								println("exit domain construction")
 							} else { //domains are effectively constant
 								opInterp("$exists_in_world_" + sort).apply("default").head match {
 									case "$true" => {
@@ -117,6 +117,7 @@ object KripkeModel{
 									case "$false" => { //[WIP] shouldn't happen bc then no elements exist in any world => error when specifying 
 										println("no elements in any world. specifying $exists_in_world_" + sort + " must have been faulty.")
 									}
+								println("exit domain construction")
 								}
 							}
 						}

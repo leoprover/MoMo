@@ -7,9 +7,8 @@ import io.github.cvc5._
 import io.github.cvc5.modes._
 
 class ModelFinder(premises: String, inference: String) {
-	//maybe add a list for when tptp to smt; list the symbols?
-	//what it's supposed to do: accept premises and the inference. try to find (counter-)model
-	final def apply(): String = { //probably not as a string but idk what yet
+
+	final def apply(): String = {
 		//check whether unsat was returned
 		var satStatus = 0 //1 if unsat
 		//to save result/model

@@ -112,8 +112,11 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 				case "axiom" => {
 					tptpForm.formula match {
 						case tptpAx: TPTP.TFF.Logical => {
+							println("*******************")
+							println(tptpAx.pretty)
 							smtAx += tptp2smtFormula(tptpAx.formula, "(assert ")
 							smtAx += ")\n"
+							println("##################")
 						}
 						case _ => {
 							println("axiom but formula is not Logical")
@@ -121,7 +124,7 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 					}
 				}
 				case "conjecture" => {
-					if(smtCon == ""){//[WIP] maybe there is a scala isEmpty for strings? i forgor
+					if(smtCon == ""){
 						tptpForm.formula match {
 							case tptpCon: TPTP.TFF.Logical => {
 								smtCon = tptp2smtFormula(tptpCon.formula, "(assert (not ")
@@ -212,11 +215,12 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 			case tptpAtT: AtomicTerm => {
 
 				if(tptpAtT.args.length > 0){
-					smtExprVar += "(" + tptpAtT.f.replace("'", "")
+					smtExprVar += "(" + tptpAtT.f.replace("'", "") + " "
 					for(atTArg <- tptpAtT.args){
 						smtExprVar = tptp2smtTerm(atTArg, smtExprVar)
 						smtExprVar += " "
 					}
+					smtExprVar += ")"
 				} else {
 					smtExprVar += tptpAtT.f.replace("'", "")
 				}
@@ -232,11 +236,8 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 	
 	def tptp2smtFormula(tptpForm: Formula, smtForm: String): String = {
 		var smtFormVar = smtForm
-		//var smtFormVar = ""
-		println(smtFormVar)
 		tptpForm match {
 			case tptpAtF: AtomicFormula => {
-				//println("atomic formula")
 				if(tptpAtF.args.length > 0) {
 					smtFormVar += "(" + tptpAtF.f.replace("'", "") + " "
 					for(atFArg <- tptpAtF.args){
