@@ -7,7 +7,7 @@ import leo.datastructures.TPTP
 import leo.datastructures.TPTP.TFF._
 import leo.modules.input.TPTPParser
 
-import java.io.FileNotFoundException
+import java.io.{FileNotFoundException, File, FileWriter}
 import java.nio.file.{InvalidPathException, Path, Paths, Files}
 
 import scala.sys.process._
@@ -17,6 +17,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 import scala.util.{Try, Success, Failure}
+import scala.io.StdIn.readLine
+
+//[WIP] general to do: saving models, type inference, recheck errors, cleaning "debugging" println, flexible designation?
 
 
 object MoMo {
@@ -28,6 +31,9 @@ object MoMo {
 	private[this] var worldNumber : Option[Int] = None
 	private[this] var modelPath : Option[String] = None
 	private[this] var letPath = Path.of("./lib/logic-embedding-app-1.9.2.jar").toAbsolutePath
+	private[this] var modelType = "model"
+	private[this] var tmpFile : Option[java.nio.file.Path] = None
+ 	
 	
 	//main process
 	final def main(args: Array[String]): Unit = {
@@ -49,44 +55,66 @@ object MoMo {
 				parseArgs(args.toSeq)
 			} catch {
 				case ex: NumberFormatException => 
-					//println("numberformat")
-					println("error during cmd line parsing. " + ex.getMessage)
-					System.exit(1)
+					//println("error during cmd line parsing. " + ex.getMessage)
+					printOutput("ERR", None, Some(ex.getClass.toString), Some("error during cmd line parsing. " + ex.getMessage))					
+					//System.exit(1)
 				case ex: IllegalArgumentException => 
-					//println("illegal")
-					println("error during cmd line parsing. " + ex.getMessage) 
-					System.exit(1)
+					//println("error during cmd line parsing. " + ex.getMessage) 
+					//System.exit(1)
+					printOutput("ERR", None, Some(ex.getClass.toString), Some("error during cmd line parsing. " + ex.getMessage))
 				case ex: NoSuchElementException =>
-					println("error during cmd line parsing. " + ex.getMessage)
-					System.exit(1)
+					//println("error during cmd line parsing. " + ex.getMessage) 
+					//System.exit(1)
+					printOutput("ERR", None, Some(ex.getClass.toString), Some("error during cmd line parsing. " + ex.getMessage))
 				case ex: Throwable =>
-					println("unexpected error during cmd line parsing: " + ex.getMessage + ".\nSee the help information for possible arguments and options:\n")
-					printHelp()
-					System.exit(1)
+					printOutput("ERR", None, Some(ex.getClass.toString), Some("unexpected error during cmd line parsing. " + ex.getMessage))
 			}
 		}
 		println("Finished parsing cmd line args")
 		//[WIP] when upgrading to scala3, LET will be proper dependency, so this will change anyway sometime. making sure that let's error msgs are displayed as well can be done then i guess
-		val letCmd = "java -jar " + letPath.toString + " " + problemPath.toString
+
+		val letCmd = "java -Xss32m -Xmx1g -jar " + letPath.toString + " " + problemPath.toString
 		var letProblem = ""
 		try {
 			letProblem = letCmd.!!
 		} catch {
-			case _ : Throwable => {
-				println("error during the embedding of the foml problem to fol")
-				System.exit(1)
+			//case e: java.lang.InterruptedException
+			case e : Throwable => {
+				//println("error during the embedding of the foml problem to fol")
+				//println(e.getClass)
+				printOutput("ERR", None, Some(e.getClass.toString), Some("error during the embedding of the foml problem to fol"))
+			}
+		} finally {
+
+			tmpFile match {
+				case None => {
+				}
+				case Some(tmp: java.nio.file.Path) => {
+					Files.delete(tmp)
+				}
 			}
 		}
+
+		
 	
 		var parsedProblem = TPTPParser.problem(letProblem)
 		//println(parsedProblem.pretty)
 		println("Finished embedding modal logical problem to classical logic")
+
+		//find out if a model (only axioms) or a countermodel (with conjecture) is searched
+		if(parsedProblem.formulas.exists(_.role == "conjecture" )){
+			modelType = "countermodel"
+		} 
+
 		//extract modal logic definition
 		//println("modal logic in use:")
 		var modalDef = TPTPParser.annotatedTFF(parsedProblem.formulaComments(parsedProblem.formulas.head.name).filter(com => com.content.contains("tff(")).head.content.replace("%",""))
 		//println(modalDef.pretty)
 
 		//[WIP] check if designation is flexible(not supported)
+		if(modalDef.pretty.contains("flexible")) {
+			printOutput("ERR", None, Some("class java.lang.Throwable"), Some("flexible designation not yet supported"))
+		}
 
 		//use classical method for classical model
 		////currently only cvc5 => translation to SMT 
@@ -94,7 +122,9 @@ object MoMo {
 		try {
 			smtProblem = TPTP2SMTTranslator.apply(parsedProblem)
 		} catch {
-			case _ => println("unexpected error during translation to smt-lib") //[WIP] error and end process
+			case ex: Throwable => {
+				printOutput("ERR", None, Some(ex.getClass.toString), Some("unexpected error during translation from tptp to smt-lib: " + ex.getMessage))
+			}
 		}
 		println("Finished translation to smt-lib")
 
@@ -109,9 +139,10 @@ object MoMo {
 		try {
 			model = Await.result(finding, timeout.second)
 		} catch {
-			case _: java.util.concurrent.TimeoutException => {
-				println("model finder timeout")
-				System.exit(1)
+			case e: java.util.concurrent.TimeoutException => {
+				//println("model finder timeout")
+				//System.exit(1)
+				printOutput("TMO", None, Some(e.getClass.toString), Some(e.getMessage))
 			}
 		}
 
@@ -120,21 +151,36 @@ object MoMo {
 		model match {  //eventually handle output generation also via helper function for outputs, handle proper SZS... and stuff!
 			case "unsat\n" => {
 				//[WIP] Check conjecture+unsat => no countermodel/; no conjecture+unsat => no model/UNS
-				println("no finite countermodel")
+				modelType match {
+					case "model" => {
+						printOutput("UNS", None, None, None)
+					}
+					case "countermodel" => {
+						printOutput("THM", None, None, None)
+					}
+				}
 			}
-			case "unknwon\n" => {
-				//[WIP] proper give up SZS
-				println("model finder gave up")
+			case "unknown\n" => {
+				printOutput("GUP", None, None, None)
 			}
 			case _ => {//[WIP] error handling (error from unexpected fol model finder output OR error within translation process)
-				//[WIP] print output model + SZS: conjecture+model => countermodel/CSA; no conjecture+model => model/SAT
-				println("finite model found (smt)")
-				println(model)
+				//println("finite model found (smt)")
+				//println(model)
 				try {
-					FOL2FOMLModelTranslator.apply(modalDef, model, "smt")
+					val kripkeModel = FOL2FOMLModelTranslator.apply(modalDef, model, "smt")
+					//kripkeModel.printModel()
+					modelType match {
+						case "model" => {
+							printOutput("SAT", Some(kripkeModel), None, None)
+						}
+						case "countermodel" => {
+							printOutput("CSA", Some(kripkeModel), None, None)
+						}
+					}
 				} catch {
 					case ex: Throwable => {
-						println("unexpected error during translation of the generated fol model to a kripke model: " + ex.getMessage)
+						//println("unexpected error during translation of the generated fol model to a kripke model: " + ex.getMessage)
+						printOutput("ERR", None, Some(ex.getClass.toString), Some("unexpected error during translation of the generated fol model to a kripke model: " + ex.getMessage))
 					}
 				}
 			}
@@ -151,8 +197,59 @@ object MoMo {
 	private[this] final def parseArgs(args: Seq[String]): Unit = {
 		problemPath = args.head
 		//[WIP] read in problem from stdin
-		if (!Files.exists(Paths.get(problemPath))) {
+		if (!Files.exists(Paths.get(problemPath)) & problemPath != "-") {
 			throw new InvalidPathException("No such file exists.", problemPath)
+		}
+
+		if(problemPath == "-"){ //read input from std in
+			var  r = ""
+			var f = ""
+			println("Input the problem via std input, one annotated formula (or tptp comment) per line. end input with '%END%':")
+			while(r != "%END%"){
+				r = readLine()
+				if(r != "%END%") {
+					try{
+						if(r.head.toString != "%"){
+							TPTPParser.annotatedTFF(r)
+						}
+						f += r + "\n"
+					} catch {
+						case e: Throwable => {
+							println("% invalid tptp annotated formula: " + e.getMessage + ". previous annotated formulas are stored, continue input:")
+						}
+					}
+				}
+			}
+			//println("Input:\n" + f)
+
+			tmpFile = Some(Files.createTempFile(null, ".txt")) //
+	 		//println(s"Temp file name: ${tmpFile.toString}")
+			//tmpFileS = Some(tmpFile.toString)
+			tmpFile match {
+				case Some(tmp: java.nio.file.Path) => {
+					println(tmp.getClass)
+					problemPath = tmp.toString
+
+					val writer = new FileWriter(tmp.toFile)
+					writer.write(f)
+					writer.close()
+				}
+				case None => {
+					printOutput("ERR", None, None, None)
+				}
+			}
+
+
+
+			//Files.delete(tmpFile)
+
+			//println("From file:")
+			//val source = scala.io.Source.fromFile(tmpFile.toFile)
+			//val lines = try source.mkString finally source.close()
+			//println(lines)
+
+			
+			//System.exit(0)
 		}
 
 		var argsO = args.tail
@@ -302,6 +399,115 @@ object MoMo {
 
 		return model
 
+	}
+
+	def printOutput(szs: String, model: Option[KripkeModel], errorClass: Option[String], errorMessage: Option[String]): Unit = {
+		szs match {
+			//successes
+			case "SAT" => {
+				println("% SZS status Satisfiable")
+				println("% SZS output start FiniteModel")
+				model match {
+					case Some(k: KripkeModel) => {
+						k.printModel()
+
+						println("% SZS output end FiniteModel")
+
+						modelPath match {
+							case None => {
+								//println("% no model is saved")
+							}
+							case Some(path: String) => {
+								val writer = new FileWriter(Paths.get(path).toFile)
+								writer.write(k.pretty)
+								writer.close()
+								println("% saved model to " + path)
+							}
+						}
+					}
+					case None => {
+					}
+				}
+			}
+			case "CSA" => {
+				println("% SZS status CounterSatisfiable")
+				println("% SZS output start FiniteModel")
+				model match {
+					case Some(k: KripkeModel) => {
+						k.printModel()
+						println("% SZS output end FiniteModel")
+
+						modelPath match {
+							case None => {
+								//println("% no model is saved")
+							}
+							case Some(path: String) => {
+								val writer = new FileWriter(Paths.get(path).toFile)
+								writer.write(k.pretty)
+								writer.close()
+								println("% saved model to " + path)
+							}
+						}
+
+					}
+					case None => {
+					}
+				}
+				//println("% SZS output end FiniteModel")
+			}
+
+			case "UNS" => {
+				println("% SZS status Unsatisfiable")
+			}
+			case "THM" => {
+				println("% SZS status Theorem: no countermodel was found.")
+			}
+
+			//failures
+			case "TMO" => {
+				errorClass match {
+					case Some(c: String) => {
+						print("% SZS status Timeout: " + c)
+						errorMessage match {
+							case Some(m: String) => {
+								println(m)
+							}
+							case None => {
+								print("\n")
+							}
+						}
+					}
+					case None => {
+						print("% SZS status Timeout")
+					}
+				}
+				System.exit(1)
+			}
+			case "GUP" => {
+				println("% SZS status GaveUp")
+				//print(error.getMessage)
+				System.exit(1)
+			}
+			case "ERR" => {
+				errorClass match {
+					case Some(c: String) => {
+						print("% SZS status Error: " + c)
+						errorMessage match {
+							case Some(m: String) => {
+								println(": " + m)
+							}
+							case None => {
+								print("\n")
+							}
+						}
+					}
+					case None => {
+						print("% SZS status Error")
+					}
+				}
+				System.exit(1)
+			}
+		}
 	}
 
 }

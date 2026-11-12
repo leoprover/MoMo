@@ -10,79 +10,81 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 	var smtAx = ""
 	var smtCon = ""
 	def apply(): Seq[String] = {
+
+		
 		//*this part will be cleaned up/deleted 
-		for(formula <- tptpForms){
-				println(formula.pretty)
-				println("__________________________________________________")
-				println(formula.annotations)
-				println(formula.formula)
-				println("	", formula.formula.getClass)
-				println(formula.formulaType)
-				println(formula.name)
-				println(formula.role)
-				println(formula.symbols)
-				println("####################################################")
-			}
+//		for(formula <- tptpForms){
+//				println(formula.pretty)
+//				println("__________________________________________________")
+//				println(formula.annotations)
+//				println(formula.formula)
+//				println("	", formula.formula.getClass)
+//				println(formula.formulaType)
+//				println(formula.name)
+//				println(formula.role)
+//				println(formula.symbols)
+//				println("####################################################")
+////			}
 
-			println("____TPTP TTYPE TO SMT SORT DECL________")
-			var smtSortDecl = "(declare-sort "
-			tptpForms(0).formula match {
-				case formulaTyp: TPTP.TFF.Typing => println(smtSortDecl + formulaTyp.atom.toString.replace("'", "") + " 0)")
-				case _ => println("is not typing")
-			}
+////			println("____TPTP TTYPE TO SMT SORT DECL________")
+//		var smtSortDecl = "(declare-sort "
+//			tptpForms(0).formula match {
+//				case formulaTyp: TPTP.TFF.Typing => println(smtSortDecl + formulaTyp.atom.toString.replace("'", "") + " 0)")
+//				case _ => println("is not typing")
+////			}
 
-			println("____TPTP CONST TO SMT FUN DECL________")
-			var smtFunDecl = "(declare-fun "
-			tptpForms(1).formula match {
-				case formulaTyp: TPTP.TFF.Typing => {
-					formulaTyp.typ match {
-						case atomicTyp: TPTP.TFF.AtomicType => {
-							val cSort = atomicTyp.name.toString.replace("'", "")
-							println(smtFunDecl + formulaTyp.atom.toString.replace("'", "") + " () " + cSort + ")")
-						}
-						case _ => println("not constant")
-					}
+////			println("____TPTP CONST TO SMT FUN DECL________")
+//			//var smtFunDecl = "(declare-fun "
+//			tptpForms(1).formula match {
+//				case formulaTyp: TPTP.TFF.Typing => {
+//					formulaTyp.typ match {
+//						case atomicTyp: TPTP.TFF.AtomicType => {
+//							val cSort = atomicTyp.name.toString.replace("'", "")
+//							println(smtFunDecl + formulaTyp.atom.toString.replace("'", "") + " () " + cSort + ")")
+//						}
+//						case _ => println("not constant")
+//					}
+//
+//				}
+//				case _ => println("is not const decl")
+////			}
 
-				}
-				case _ => println("is not const decl")
-			}
-
-			println("____TPTP FUN TO SMT FUN DECL________")
-			tptpForms(2).formula match {
-				case formulaTyp: TPTP.TFF.Typing => {
-					formulaTyp.typ match {
-						case mapTyp: TPTP.TFF.MappingType => {
-							var outSort = ""
-							mapTyp.right match {
-								case out: TPTP.TFF.AtomicType => {
-									outSort =  out.name.toString.replace("'", "")
-								}
-								//case outList: Seq[Type] => println("returns more than just a constant/boolean")
-								case _ => println("idk sth wrong")
-
-							}
-							var inString = " ("
-							for(inMatch <- mapTyp.left) {
-								//println(inMatch.toString)
-								inMatch match {
-									case out: TPTP.TFF.AtomicType => {
-										inString +=  out.name.toString.replace("'", "") + " "
-									}
-									//case outList: Seq[Type] => println("returns more than just a constant/boolean")
-									case _ => println("idk sth wrong")
-								}
-								
-							}
-							inString = inString.dropRight(1) + ") "
-							println(smtFunDecl + formulaTyp.atom.toString.replace("'", "") + inString + outSort + ")")
-							
-						}
-						case _ => println("not function")
-					}
-
-				}
-				case _ => println("is not fun decl")
-			}
+//			println("____TPTP FUN TO SMT FUN DECL________")
+//			tptpForms(2).formula match {
+//				case formulaTyp: TPTP.TFF.Typing => {
+//					formulaTyp.typ match {
+//						case mapTyp: TPTP.TFF.MappingType => {
+////							var outSort = ""
+//							mapTyp.right match {
+//								case out: TPTP.TFF.AtomicType => {
+//									outSort =  out.name.toString.replace("'", "")
+//								}
+//								//case outList: Seq[Type] => println("returns more than just a constant/boolean")
+//								case _ => println("idk sth wrong")
+//
+//							}
+//							var inString = " ("
+//							for(inMatch <- mapTyp.left) {
+//								//println(inMatch.toString)
+//								inMatch match {
+//									case out: TPTP.TFF.AtomicType => {
+//										inString +=  out.name.toString.replace("'", "") + " "
+//									}
+//									//case outList: Seq[Type] => println("returns more than just a constant/boolean")
+//									case _ => println("idk sth wrong")
+//								}
+//								
+//							}
+//							inString = inString.dropRight(1) + ") "
+//							println(smtFunDecl + formulaTyp.atom.toString.replace("'", "") + inString + outSort + ")")
+//							
+//						}
+////						case _ => println("not function")
+//					}
+//
+//				}
+//				case _ => println("is not fun decl")
+//			}
 
 			//println("____TPTP FORMULA TO SMT FORMULA________")
 			//var smtForm = ""
@@ -102,21 +104,26 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 			//}
 
 
-		println("____________________________________________")
+//		println("____________________________________________")
 		//*above will be deleted, below is what actually translates stuff
 
+		if(tptpForms.mkString(" ").contains("$i")) {
+			smtDecl += "(declare-sort $i 0)"
+		}
+			
+
 		for(tptpForm <- tptpForms){
-			println(tptpForm)
-			println(tptpForm.role)
-			tptpForm.role match { //better to switch this i think?
+			//println(tptpForm)
+			//println(tptpForm.role)
+			tptpForm.role match { 
 				case "axiom" => {
 					tptpForm.formula match {
 						case tptpAx: TPTP.TFF.Logical => {
-							println("*******************")
-							println(tptpAx.pretty)
+							//println("*******************")
+							//println(tptpAx.pretty)
 							smtAx += tptp2smtFormula(tptpAx.formula, "(assert ")
 							smtAx += ")\n"
-							println("##################")
+							//println("##################")
 						}
 						case _ => {
 							println("axiom but formula is not Logical")
@@ -184,7 +191,7 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 									}
 									inString = inString.dropRight(1) + ") "
 									//println(smtFunDecl + tptpTyp.atom.toString.replace("'", "") + inString + outSort + ")")
-									smtDecl += smtFunDecl + tptpTyp.atom.toString.replace("'", "") + inString + outSort + ")\n"
+									smtDecl += "(declare-fun " + tptpTyp.atom.toString.replace("'", "") + inString + outSort + ")\n"
 								}
 								case _ =>{
 									println("unexpected typ in Typing")
@@ -198,12 +205,12 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 				case _ => println("unsupported tptp role")
 			}
 		}
-		println("_________SMT AX__________")
-		println(smtAx)
-		println("_________SMT CON__________")
-		println(smtCon)
-		println("_________SMT DECL__________")
-		println(smtDecl)
+		//println("_________SMT AX__________")
+		//println(smtAx)
+		//println("_________SMT CON__________")
+		//println(smtCon)
+		//println("_________SMT DECL__________")
+		//println(smtDecl)
 
 		Seq(smtDecl, smtAx, smtCon)
 			
@@ -245,7 +252,18 @@ final class TPTP2SMTTranslator(tptpForms: Seq[AnnotatedFormula]) {
 					}
 					smtFormVar = smtFormVar.dropRight(1) + ")"
 				} else {
-					smtFormVar += tptpAtF.f.replace("'", "")
+					//smtFormVar += tptpAtF.f.replace("'", "").replace("$", "") 
+					tptpAtF.f.replace("'", "") match {
+						case "$true" => {
+							smtFormVar += "true"
+						}
+						case "$false" => {
+							smtFormVar += "false"
+						}
+						case _ => {
+							smtFormVar += tptpAtF.f.replace("'", "")
+						}
+					}
 				}
 			}
 			case tptpUna: UnaryFormula => {

@@ -10,7 +10,7 @@ import scala.collection.mutable.Stack
 
 //think abt restructuring it: more helper structuring. esp. for interpretations, helper structure is... convoluted? 
 final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[String]) {
-	def smt(): Unit = {//KripkeModel {
+	def smt(): KripkeModel = {//KripkeModel {
 		//intermediate helper structures. symbols should be saved in the form they may be used in TPTP format
 		//println("go into fol(smt)2foml translator success")
 		var sorts: Option[scala.collection.mutable.Map[String, Stack[String]]] = None //[WIP] can reformulate to not make it option bc sort incl $world always. unless i allow classical fol, too?
@@ -97,7 +97,7 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 						opName(opNameNow) = opName(opNameNow).concat(Seq(inType(n)))
 					}
 
-					println(opName)
+					//println(opName)
 					//////note interpretation in each world
 					var opStack = Stack.empty[String]
 					if(opName(opNameNow).head == "$o"){ //for propositional/predicate symbols
@@ -107,12 +107,15 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 									interpH.head match {
 										case t if t.equals("true") => { //always true
 											opInterp.apply(opNameNow).update("default", Seq("$true"))
+											opInterp.apply(opNameNow).update("all", Seq.empty[String])
 										}
 										case t if t.equals("false") => { //always false
 											opInterp.apply(opNameNow).update("default", Seq("$false"))
+											opInterp.apply(opNameNow).update("all", Seq.empty[String])
 										}
 										case _ => { //otherwise
 											opInterp.apply(opNameNow).update("default", Seq("$false"))
+											opInterp.apply(opNameNow).update("all", Seq.empty[String])
 											var inNow = Map.empty[String, String]
 											var inH = ""
 											for(part <- interpH){
@@ -126,9 +129,9 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 														case "as" => {
 															if( inH == ""){
 																inH = part.replace("@","").replace("$","").replace(")", "")
-															} else {
-																println(inH)
-															}
+															} //else {
+															//	println(inH)
+															//}
 														}
 														case "=" => {
 															inNow.update(part.replace(")",""), inH)
@@ -162,6 +165,7 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 										}
 									}
 								} else {
+									//println(opNameNow + " PRED/PROP")
 									interpH.head match {
 										case t if t.equals("true") => { //always true
 											opInterp.apply(opNameNow).update("default", Seq("$true"))
@@ -178,6 +182,7 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 											var inNow = Map.empty[String, String]
 											var inH = ""
 											for(part <- interpH){
+												//println(part)
 												if(part.startsWith("(")){ //update op stack with new status/operation
 													opStack.push(part.replace("(",""))
 													if(opStack.top == "not"){
@@ -210,7 +215,7 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 													
 													if( part.contains(")")){ //update status by removing top of stack
 														opStack.pop
-														println("Stacktop: " + opStack.top)
+														//println("Stacktop: " + opStack.top)
 														if(in.size == inNow.size){
 															var h = Seq.empty[String]
 															for(n <- in.keys){
@@ -234,12 +239,13 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 						sorts match {
 							case Some(sortsMap: Map[String, Stack[String]]) => {
 								if((interpH.head.replace("(","").equals("as") & interpH.size == 3) | (opName(opNameNow).size == 1)) { //all mapped to the same elem or simply a constant
-									println("function of arity" + opName(opNameNow).size.toString + " or constant")
-									println(interpH)
+									//println("function of arity" + opName(opNameNow).size.toString + " or constant")
+									//println(interpH)
 									opInterp.update(opNameNow, Map("default" -> Seq(interpH(1).replace("@", "").replace("$", "")), "all" -> Seq(interpH(1).replace("@", "").replace("$", ""))))
 								} else { //[WIP] HEREHEREHERE function with positive arity
-									println("function of arity " + (opName(opNameNow).size-1).toString)
-									println(interpH.mkString(" "))
+									//println("function of arity " + (opName(opNameNow).size-1).toString)
+									//println(modalDef.pretty.contains("flexible"))
+									//println(interpH.mkString(" "))
 
 									if(modalDef.pretty.contains("flexible")){ //later when flexible designation for functions and constants supported and needed to differentiate
 										throw new Throwable("flexible designation not yet supported")
@@ -248,7 +254,9 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 										opInterp.apply(opNameNow).update("all", Seq.empty[String])
 										if(interpH.head.contains("ite")) {
 											opInterp.apply(opNameNow)("all") = opInterp.apply(opNameNow).apply("all").concat(smtIte(interpH, in))									
-										} 
+										} else {
+											throw new Throwable("unexpected structure of fol model in smt")
+										}
 									}	
 								}
 							}
@@ -263,34 +271,36 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 				}
 			}
 		}
-		val kripkemodel = KripkeModel.apply(modalDef, sorts, opName, opInterp)
-		kripkemodel.printModel() //[WIP] delete when output function in MoMo finished -> printing model and stuff there
+		//println(opInterp)
+		//val kripkemodel = KripkeModel.apply(modalDef, sorts, opName, opInterp)
+		//kripkemodel.printModel() //[WIP] delete when output function in MoMo finished -> printing model and stuff there
+		return KripkeModel.apply(modalDef, sorts, opName, opInterp)
 	}
 
 	def smtIte(smtI: Seq[String], in: Map[Int, String]): Seq[String] = {
-		println("smtIte")
+		//println("smtIte")
 		var interpH = Seq.empty[String] // "== opInterp.apply(opNameNow).apply("all")"
 		var iteStack = Stack.empty[Int]
 		var opStack = Stack("")
 		var inNow = Map.empty[String, String]
 		var inH = ""
 		for(part <- smtI){
-			println("PART: " + part)
+			//println("PART: " + part)
 			if(part.startsWith("(")){ 
 				if(part.replace("(","") == "ite"){
 					interpH  = interpH.concat(Seq("ite"))
 					iteStack.push(1)
 				}
 				opStack.push(part.replace("(",""))
-				println("Stack: " + opStack)
+				//println("Stack: " + opStack)
 			} else {  //different commands based on stack status
 				opStack.top match {
 					case "as" => {
 						if( inH == ""){
 							inH = part.replace("@","").replace("$","").replace(")", "")
-						} else {
-							println(inH)
-						}
+						} //else {
+						//	println(inH)
+						//}
 					}
 					case "=" => {
 						inNow.update(part.replace(")",""), inH)
@@ -311,13 +321,15 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 							for(now <- inNow.keys){
 								//println(in.filter(_._2 == now).keys.head)
 								h += in.filter(_._2 == now).keys.head + "@" + inNow(now) + " "
-								println(h)
+								//println(h)
 							}
 							h = h.dropRight(1)
 							interpH = interpH.concat(Seq(h))
 						} else {
-							interpH = interpH.concat(Seq(inH))
-							inH = ""
+							if(inH != ""){
+								interpH = interpH.concat(Seq(inH))
+								inH = ""
+							}
 						}
 						inNow =	Map.empty[String, String]
 						var itePop = iteStack.pop
@@ -326,8 +338,9 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 				}
 
 			}
+			//println("MID: " + interpH.mkString(";"))
 		}
-		println("FINAL: " + interpH.mkString(";"))
+		//println("FINAL: " + interpH.mkString(";"))
 		return interpH
 
 	}
@@ -337,7 +350,7 @@ final class FOL2FOMLModelTranslator(modalDef: AnnotatedFormula, model: Seq[Strin
 
 
 object FOL2FOMLModelTranslator {
-	def apply(modalDef: AnnotatedFormula, model: String, format: String): Unit = { //KripkeModel {
+	def apply(modalDef: AnnotatedFormula, model: String, format: String): KripkeModel = { //KripkeModel {
 		var modelH = model.split("\n").toSeq
 		modelH = modelH.slice(1,modelH.size-1)
 		val modeltranslator = new FOL2FOMLModelTranslator(modalDef, modelH)

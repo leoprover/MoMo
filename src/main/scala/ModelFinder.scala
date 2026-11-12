@@ -16,7 +16,7 @@ class ModelFinder(premises: String, inference: String) {
 
 		//set ss to premise + inference
 		var ss = "(set-logic UF)\n"
-		ss += "(declare-sort $i 0)\n"
+		//ss += "(declare-sort $i 0)\n"
 		ss += premises + inference
 		ss += "(check-sat)\n"
 		ss += "(get-model)"
@@ -48,7 +48,7 @@ class ModelFinder(premises: String, inference: String) {
 		while (!cmd.isNull() & satStatus == 0) {
 			println(s"Executing command ${cmd}: ")
 			res = cmd.invoke(solver, sm)
-			println(res)
+			//println(res)
 			if (res == "unsat\n") {
 				satStatus = 1
 			} else {
